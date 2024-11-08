@@ -140,20 +140,29 @@ def create_final_graph(graph: list[list[int]]) -> list[list[int]]:
 # end def
 
 
+def draw_final_graph(final_graph: list[list[int]], word: str, filename: str):
+    """
+    Creates .png file presenting final word's graph in Examples/ directory.
+    :param final_graph: Final version of word's graph.
+    :param word: Specified word.
+    :param filename: Name of the file, where .png file should be placed
+    :return:
+    """
+    view = graphviz.Digraph(name=f'Examples/{filename}', format='png')
+    for v in range(len(final_graph)):
+        for u in final_graph[v]:
+            view.edge(str(v), str(u))
+        view.node(str(v), label=word[v])
+    view.render(view=True)
+# end def
 
 
-equations, alphabet, word = get_and_form_data('case3.txt')
+equations, alphabet, word = get_and_form_data('case1.txt')
 dep_relations, indep_relations = create_relations(equations)
 print(dep_relations)
 print(indep_relations)
 graph = create_word_graph(dep_relations, word)
 print(graph)
-print(create_final_graph(graph))
+final_graph = create_final_graph(graph)
 print(word)
-check_graph = [
-    [1, 3],
-    [2],
-    [3],
-    []
-]
-# print(create_final_graph(check_graph))
+draw_final_graph(final_graph, word, 'case1')
