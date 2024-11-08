@@ -6,6 +6,7 @@ def get_and_form_data(filename: str) -> (list[str], str, str):
     """
     file = open(f'Examples/{filename}', 'r', encoding='utf-8')
     lines = file.readlines()
+    print(lines)
     file.close()
 
     # Equations
@@ -27,7 +28,11 @@ def get_and_form_data(filename: str) -> (list[str], str, str):
     i = 0
     while lines[-2][i] != '{':
         i += 1
-    alphabet = lines[-2][i+1:-2].split(sep=", ")
+    alphabet = lines[-2][i+1:-2].split(sep=",")
+    for char in alphabet:
+        if len(char) > 1:
+            alphabet[alphabet.index(char)] = char[1]
+    print(alphabet)
 
     # Removing equations for characters not mentioned in the alphabet
     for equation in list_of_equations:
@@ -50,6 +55,7 @@ def create_relations(list_of_equations: list[str]) -> (list[tuple[str, str]], li
     :param list_of_equations: List of equations as list.
     :return: List of dependent relations and list of independent relations.
     """
+    print(list_of_equations)
     dependent_relations = []
     independent_relations = []
     for equation in list_of_equations:
@@ -72,7 +78,27 @@ def create_relations(list_of_equations: list[str]) -> (list[tuple[str, str]], li
 # end def
 
 
-equations, alphabet, word = get_and_form_data('case3.txt')
+def create_word_graph(dependent_relations: list[tuple[str, str]], word: str):
+    """
+    Creates word graph with all edges.
+    :param dependent_relations: Dependent relations between all chars.
+    :param word: Word witch graph will be returned.
+    :return: Graph of specified word with all edges.
+    """
+    graph = [[] for _ in range(len(word))]
+    for i in range(len(word)):
+        curr_char = word[i]
+        for j in range(i+1, len(word)):
+            next_char = word[j]
+            if (curr_char, next_char) in dependent_relations:
+                graph[i].append(j)
+    return graph
+# end def
+
+
+equations, alphabet, word = get_and_form_data('case2.txt')
 dep_relations, indep_relations = create_relations(equations)
 print(dep_relations)
 print(indep_relations)
+print(word)
+create_word_graph(dep_relations, word)
