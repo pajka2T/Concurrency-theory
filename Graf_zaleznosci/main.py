@@ -1,4 +1,5 @@
 import copy
+import graphviz
 
 
 def get_and_form_data(filename: str) -> (list[str], str, str):
@@ -96,7 +97,12 @@ def create_word_graph(dependent_relations: list[tuple[str, str]], word: str) -> 
 # end def
 
 
-def create_final_graph(graph: list[list[int]], word: str) -> list[list[int]]:
+def create_final_graph(graph: list[list[int]]) -> list[list[int]]:
+    """
+    For specified word's graph creates its equivalent version without redundant edges.
+    :param graph: Word's graph.
+    :return: Graph without redundant edges.
+    """
     edges = []
     for v in range(len(graph)):
         for u in graph[v]:
@@ -105,10 +111,13 @@ def create_final_graph(graph: list[list[int]], word: str) -> list[list[int]]:
 
     removed = 0
     edges_copy = copy.deepcopy(edges)
-    for i in range(len(edges)):
+    i = 0
+    while i < len(edges):
         right_vertex = edges[i][1]
-        for j in range(i+1, len(edges)):
+        j = 0
+        while j < len(edges):
             left_vertex = edges[j][0]
+            # print(right_vertex, left_vertex)
             if right_vertex == left_vertex:
                 new_edge = (edges[i][0], edges[j][1])
                 edges.append(new_edge)
@@ -122,18 +131,29 @@ def create_final_graph(graph: list[list[int]], word: str) -> list[list[int]]:
                         removed += 1
                     # print(edges, removed)
                     # print(edges_copy)
-    final_graph = [[] for _ in range(len(word))]
+            j += 1
+        i += 1
+    final_graph = [[] for _ in range(len(graph))]
     for edge in edges_copy:
         final_graph[edge[0]].append(edge[1])
     return final_graph
 # end def
 
 
-equations, alphabet, word = get_and_form_data('case1.txt')
+
+
+equations, alphabet, word = get_and_form_data('case3.txt')
 dep_relations, indep_relations = create_relations(equations)
 print(dep_relations)
 print(indep_relations)
 graph = create_word_graph(dep_relations, word)
 print(graph)
-print(create_final_graph(graph, word))
+print(create_final_graph(graph))
 print(word)
+check_graph = [
+    [1, 3],
+    [2],
+    [3],
+    []
+]
+# print(create_final_graph(check_graph))
