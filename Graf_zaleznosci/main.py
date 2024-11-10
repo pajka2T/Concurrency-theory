@@ -112,29 +112,22 @@ def create_final_graph(graph: list[list[int]]) -> list[list[int]]:
     removed = 0
     edges_copy = copy.deepcopy(edges)
     i = 0
-    while i < len(edges):
-        right_vertex = edges[i][1]
+    while i < len(edges_copy):
+        right_vertex = edges_copy[i][1]
         j = 0
-        while j < len(edges):
-            left_vertex = edges[j][0]
-            # print(right_vertex, left_vertex)
+        while j < len(edges_copy):
+            left_vertex = edges_copy[j][0]
             if right_vertex == left_vertex:
-                new_edge = (edges[i][0], edges[j][1])
-                edges.append(new_edge)
-                # print(edges)
-                count = edges.count(new_edge)
-                # print(count)
-                if count > 1:
-                    # print(edges_copy, new_edge)
-                    if new_edge in edges_copy:
-                        edges_copy.remove(new_edge)
+                new_edge = (edges_copy[i][0], edges_copy[j][1])
+                edges_copy.append(new_edge)
+                if edges_copy.count(new_edge) > 1:
+                    if new_edge in edges:
+                        edges.remove(new_edge)
                         removed += 1
-                    # print(edges, removed)
-                    # print(edges_copy)
             j += 1
         i += 1
     final_graph = [[] for _ in range(len(graph))]
-    for edge in edges_copy:
+    for edge in edges:
         final_graph[edge[0]].append(edge[1])
     return final_graph
 # end def
@@ -157,12 +150,77 @@ def draw_final_graph(final_graph: list[list[int]], word: str, filename: str):
 # end def
 
 
-equations, alphabet, word = get_and_form_data('case1.txt')
-dep_relations, indep_relations = create_relations(equations)
-print(dep_relations)
-print(indep_relations)
-graph = create_word_graph(dep_relations, word)
-print(graph)
-final_graph = create_final_graph(graph)
-print(word)
-draw_final_graph(final_graph, word, 'case1')
+def create_FNF(final_graph: list[list[int]], word: str) -> str:
+    """
+    Creates FNF of word.
+    :param final_graph: Final version of word's graph.
+    :param word: Specified word.
+    :return: FNF of word.
+    """
+
+    foat_list = [set() for _ in range(len(word))]
+    visited_vertices = [False for _ in range(len(word))]
+
+    # Creating list of vertices that can be obtained in next step of operations.
+    # Recursive function helps in identifying step in which variable will be called.
+    def next_char(char_ind: int, depth: int):
+        visited_vertices[char_ind] = True
+        foat_list[depth].add(char_ind)
+        for char in final_graph[char_ind]:
+            next_char(char, depth + 1)
+    # end def
+
+    # Some vertices might not be available when starting in first vertex,
+    # so we have to start recursive function in them also.
+    while False in visited_vertices:
+        next_char(visited_vertices.index(False), 0)
+
+    # Some vertices are available by few ways and these ways can have different lengths.
+    # Sometimes there is a problem when one way is shorter and can get vertex in fewer steps than another.
+    # It may cause problem, when other vertices from longer ways should be called before vertex of this way.
+    # We have to prevent such situations and code below does it.
+    i = 0
+    copied_foat_list = copy.deepcopy(foat_list)
+    for step in copied_foat_list:
+        for number in step:
+            is_deeper = False
+            next_set_number = i + 1
+            while not is_deeper and next_set_number < len(word):
+                if number in copied_foat_list[next_set_number]:
+                    foat_list[i].remove(number)
+                    is_deeper = True
+                next_set_number += 1
+        i += 1
+
+    print("Foat list before final FNF creation", foat_list)
+
+    # Creating final version of FNF with removal of redundant steps.
+    # Redundant step can exist in foat_list because there are multiple ways to get to some vertices,
+    # but we want to get only the shortest one.
+    foat = ''
+    for level in foat_list:
+        is_it_first = True
+        for number in level:
+            if is_it_first:
+                foat += '(' + word[number]
+                is_it_first = False
+            else:
+                foat += word[number]
+        if not is_it_first:
+            foat += ')'
+    return foat
+# end def
+
+
+def solve(filename: str) -> (list[tuple[str, str]], list[tuple[str, str]], list[list[int]], str):
+    equations, alphabet, word = get_and_form_data(filename)
+    dep_relations, indep_relations = create_relations(equations)
+    graph = create_word_graph(dep_relations, word)
+    final_graph = create_final_graph(graph)
+    draw_final_graph(final_graph, word, filename[:-4])
+    fnf = create_FNF(final_graph, word)
+    return dep_relations, indep_relations, final_graph, fnf
+# end def
+
+
+print(solve('case3.txt'))
