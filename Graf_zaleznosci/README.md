@@ -331,39 +331,26 @@ def create_FNF(final_graph: list[list[int]], word: str) -> str:
     while False in visited_vertices:
         next_char(visited_vertices.index(False), 0)
 
-    # Some vertices are available by few ways and these ways can have different lengths.
-    # Sometimes there is a problem when one way is shorter and can get vertex in fewer steps than another.
-    # It may cause problem, when other vertices from longer ways should be called before vertex of this way.
-    # We have to prevent such situations and code below does it.
-    i = 0
-    copied_foat_list = copy.deepcopy(foat_list)
-    for step in copied_foat_list:
-        for number in step:
-            is_deeper = False
-            next_set_number = i + 1
-            while not is_deeper and next_set_number < len(word):
-                if number in copied_foat_list[next_set_number]:
-                    foat_list[i].remove(number)
-                    is_deeper = True
-                next_set_number += 1
-        i += 1
-
-    print("Foat list before final FNF creation", foat_list)
-
-    # Creating final version of FNF with removal of redundant steps.
-    # Redundant step can exist in foat_list because there are multiple ways to get to some vertices,
-    # but we want to get only the shortest one.
+    # Now the normal foat form can be finally created.
+    # The algorithm go from the back of foat_list, so from the deepest parts of graph,
+    # and adds each sign to the front side of foat, if it was not used before,
+    # because sometimes the same sign can occur in few levels of foat_list.
+    # This is because there may be few ways to go to each sign, but we are interested only in the longest one.
     foat = ''
-    for level in foat_list:
+    already_used = []
+    for i in range(len(word)-1, -1, -1):
+        level = foat_list[i]
         is_it_first = True
         for number in level:
-            if is_it_first:
-                foat += '(' + word[number]
-                is_it_first = False
-            else:
-                foat += word[number]
+            if number not in already_used:
+                already_used.append(number)
+                if is_it_first:
+                    foat = word[number] + ')' + foat
+                    is_it_first = False
+                else:
+                    foat = word[number] + foat
         if not is_it_first:
-            foat += ')'
+            foat = '(' + foat
     return foat
 # end def
 ```
