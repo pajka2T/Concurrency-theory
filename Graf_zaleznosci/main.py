@@ -210,5 +210,6 @@ def solve(filename: str) -> (list[tuple[str, str]], list[tuple[str, str]], list[
 # end def
 
 
-# Example
-print(solve('case1.txt'))
+if __name__ == "__main__":
+    # Example
+    print(solve('case1.txt'))
