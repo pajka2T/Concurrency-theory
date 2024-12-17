@@ -79,7 +79,7 @@ def create_relations(list_of_equations: list[str]) -> (list[tuple[str, str]], li
 # end def
 
 
-def create_word_graph(dependent_relations: list[tuple[str, str]], word: str) -> list[list[int]]:
+def create_word_graph(dependent_relations: list[tuple[str, str]], word: list[str]) -> list[list[int]]:
     """
     Creates word graph with all edges.
     :param dependent_relations: Dependent relations between all chars.
@@ -133,7 +133,7 @@ def create_final_graph(graph: list[list[int]]) -> list[list[int]]:
 # end def
 
 
-def draw_final_graph(final_graph: list[list[int]], word: str, filename: str):
+def draw_final_graph(final_graph: list[list[int]], word: list[str], filename: str):
     """
     Creates .png file presenting final word's graph in Examples/ directory.
     :param final_graph: Final version of word's graph.
@@ -150,7 +150,7 @@ def draw_final_graph(final_graph: list[list[int]], word: str, filename: str):
 # end def
 
 
-def create_FNF(final_graph: list[list[int]], word: str) -> str:
+def create_FNF(final_graph: list[list[int]], word: list[str]) -> str:
     """
     Creates FNF of word.
     :param final_graph: Final version of word's graph.
@@ -192,9 +192,10 @@ def create_FNF(final_graph: list[list[int]], word: str) -> str:
                     foat = word[number] + ')' + foat
                     is_it_first = False
                 else:
-                    foat = word[number] + foat
+                    foat = word[number] + '; ' + foat
         if not is_it_first:
             foat = '(' + foat
+    print(foat_list)
     return foat
 # end def
 
