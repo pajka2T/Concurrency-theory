@@ -150,7 +150,7 @@ def draw_final_graph(final_graph: list[list[int]], word: list[str], filename: st
 # end def
 
 
-def create_FNF(final_graph: list[list[int]], word: list[str]) -> str:
+def create_FNF(final_graph: list[list[int]], word: list[str]) -> tuple[str, list[set]]:
     """
     Creates FNF of word.
     :param final_graph: Final version of word's graph.
@@ -196,7 +196,7 @@ def create_FNF(final_graph: list[list[int]], word: list[str]) -> str:
         if not is_it_first:
             foat = '(' + foat
     print(foat_list)
-    return foat
+    return foat, foat_list
 # end def
 
 
@@ -206,7 +206,7 @@ def solve(filename: str) -> (list[tuple[str, str]], list[tuple[str, str]], list[
     graph = create_word_graph(dep_relations, word)
     final_graph = create_final_graph(graph)
     draw_final_graph(final_graph, word, filename[:-4])
-    fnf = create_FNF(final_graph, word)
+    fnf, foat_list = create_FNF(final_graph, word)
     return dep_relations, indep_relations, final_graph, fnf
 # end def
 
