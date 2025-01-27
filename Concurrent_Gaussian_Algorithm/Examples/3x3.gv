@@ -1,0 +1,56 @@
+digraph "Examples/3x3" {
+	size="9,6"
+	0 -> 1
+	0 -> 3
+	0 -> 5
+	0 -> 7
+	0 [label=<A<SUB>1,2</SUB>> fillcolor=yellow style=filled]
+	1 -> 2
+	1 [label=<B<SUB>1,1,2</SUB>> fillcolor=orange style=filled]
+	2 [label=<C<SUB>1,1,2</SUB>> fillcolor=red style=filled]
+	3 -> 4
+	3 [label=<B<SUB>1,2,2</SUB>> fillcolor=orange style=filled]
+	4 -> 18
+	4 [label=<C<SUB>1,2,2</SUB>> fillcolor=red style=filled]
+	5 -> 6
+	5 [label=<B<SUB>1,3,2</SUB>> fillcolor=orange style=filled]
+	6 -> 21
+	6 [label=<C<SUB>1,3,2</SUB>> fillcolor=red style=filled]
+	7 -> 8
+	7 [label=<B<SUB>1,4,2</SUB>> fillcolor=orange style=filled]
+	8 -> 23
+	8 [label=<C<SUB>1,4,2</SUB>> fillcolor=red style=filled]
+	9 -> 10
+	9 -> 12
+	9 -> 14
+	9 -> 16
+	9 [label=<A<SUB>1,3</SUB>> fillcolor=yellow style=filled]
+	10 -> 11
+	10 [label=<B<SUB>1,1,3</SUB>> fillcolor=orange style=filled]
+	11 [label=<C<SUB>1,1,3</SUB>> fillcolor=red style=filled]
+	12 -> 13
+	12 [label=<B<SUB>1,2,3</SUB>> fillcolor=orange style=filled]
+	13 -> 18
+	13 [label=<C<SUB>1,2,3</SUB>> fillcolor=red style=filled]
+	14 -> 15
+	14 [label=<B<SUB>1,3,3</SUB>> fillcolor=orange style=filled]
+	15 -> 22
+	15 [label=<C<SUB>1,3,3</SUB>> fillcolor=red style=filled]
+	16 -> 17
+	16 [label=<B<SUB>1,4,3</SUB>> fillcolor=orange style=filled]
+	17 -> 24
+	17 [label=<C<SUB>1,4,3</SUB>> fillcolor=red style=filled]
+	18 -> 19
+	18 -> 21
+	18 -> 23
+	18 [label=<A<SUB>2,3</SUB>> fillcolor=purple style=filled]
+	19 -> 20
+	19 [label=<B<SUB>2,2,3</SUB>> fillcolor=blue style=filled]
+	20 [label=<C<SUB>2,2,3</SUB>> fillcolor=green style=filled]
+	21 -> 22
+	21 [label=<B<SUB>2,3,3</SUB>> fillcolor=blue style=filled]
+	22 [label=<C<SUB>2,3,3</SUB>> fillcolor=green style=filled]
+	23 -> 24
+	23 [label=<B<SUB>2,4,3</SUB>> fillcolor=blue style=filled]
+	24 [label=<C<SUB>2,4,3</SUB>> fillcolor=green style=filled]
+}
